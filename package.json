@@ -1,0 +1,24 @@
+{
+  "name": "parcial2_pw_sec01_c2_2025_00133723",
+  "type": "module", 
+  "version": "1.0.0",
+  "description": "Repositorio para examen pt.2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NesjsjsjsjsjsA/Parcial2_PW_SEC01_C2_2025_00133723.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NesjsjsjsjsjsA/Parcial2_PW_SEC01_C2_2025_00133723/issues"
+  },
+  "homepage": "https://github.com/NesjsjsjsjsjsA/Parcial2_PW_SEC01_C2_2025_00133723#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
