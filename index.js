@@ -19,22 +19,23 @@ const collectUser = (req, res) => {
 
   const user = data.find((e) => e._id === param);
 
-  res.send({
-    status: true,
-    id: param,
-    user,
-  });
-
   if (!user) {
     return res.status(404).send({
       status: false,
       message: `Usuario con id ${param} no encontrado`,
     });
   }
+
+    res.send({
+    status: true,
+    id: param,
+    user,
+  });
 };
 
 const queryUser = (req, res) => {
-  const query = req.query;
+  console.log("Hola")
+    const query = req.query;
   let resultados = data;
 
   for (const key in query) {
@@ -43,7 +44,7 @@ const queryUser = (req, res) => {
     );
   }
 
-    if (!query) {
+    if (resultados.length === 0) {
     return res.status(404).send({
       status: false,
       message: `No se encontro nada con ${query}`,
@@ -54,8 +55,8 @@ const queryUser = (req, res) => {
 };
 
 app.get("/cuentas", collectUser);
-app.get("/cuentas/:param", collectUser);
 app.get("/cuentas/query", queryUser);
+app.get("/cuentas/:param", collectUser);
 
 app.listen(PORT, () => {
   console.log(`Estamos al aire en http://localhost:${PORT}`);
