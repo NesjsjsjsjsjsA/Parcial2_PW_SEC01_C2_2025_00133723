@@ -4,15 +4,18 @@ import { data } from "./const.js";
 const app = express();
 const PORT = 3130;
 
+const balanceData = data
+  .filter((user) => user.isActive === true)
+  .reduce((acum, user) => acum + user.balance, 0);
+
 app.use(express.json());
 
 const collectUser = (req, res) => {
-  const arrData = data.length;
   const { param } = req.params;
 
   if (!param) {
     return res.send({
-      "cantidad de datos": arrData,
+      cantidad: data.length,
       Cuentas: data,
     });
   }
@@ -22,41 +25,51 @@ const collectUser = (req, res) => {
   if (!user) {
     return res.status(404).send({
       status: false,
-      message: `Usuario con id ${param} no encontrado`,
+      message: `Usuario con _id ${param} no encontrado`,
     });
   }
 
-    res.send({
+  res.send({
     status: true,
-    id: param,
+    _id: param,
     user,
   });
 };
 
 const queryUser = (req, res) => {
-  console.log("Hola")
-    const query = req.query;
-  let resultados = data;
+  const query = req.query;
 
-  for (const key in query) {
-    resultados = resultados.filter(
-      (item) => String(item[key]) === String(query[key])
-    );
-  }
-
-    if (resultados.length === 0) {
-    return res.status(404).send({
+  if (!query || Object.keys(query).length === 0) {
+    return res.status(400).send({
       status: false,
-      message: `No se encontro nada con ${query}`,
+      message: "Debes enviar al menos un query param para filtrar",
     });
   }
 
-  res.send({ finded: true, data: resultados });
+  let resultados = data.filter((item) =>
+    Object.entries(query).every(
+      ([key, value]) => String(item[key]) === String(value)
+    )
+  );
+
+  if (resultados.length === 0) {
+    return res.status(404).send({
+      status: false,
+      message: "No se encontró ninguna cuenta con los filtros enviados",
+    });
+  }
+
+  res.send({ finded: true, cantidad: resultados.length, Cuentas: resultados });
 };
 
-app.get("/cuentas", collectUser);
+const balance = (req, res) => {
+  res.send({ balance: balanceData });
+};
+
 app.get("/cuentas/query", queryUser);
 app.get("/cuentas/:param", collectUser);
+app.get("/cuentas", collectUser);
+app.get("/cuentasbalance", balance);
 
 app.listen(PORT, () => {
   console.log(`Estamos al aire en http://localhost:${PORT}`);
